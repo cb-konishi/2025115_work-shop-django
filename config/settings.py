@@ -73,4 +73,8 @@ USE_TZ = False  # DBと合わせてシンプルに
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# 静的ファイルの追加ディレクトリ
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

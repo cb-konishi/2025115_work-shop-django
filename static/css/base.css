@@ -1,0 +1,257 @@
+/**
+ * ===================================
+ * Minimal Shop - Base Styles
+ * ベーススタイル: リセットと基本設定
+ * ===================================
+ */
+
+/* ===================================
+   CSS カスタムプロパティ（変数定義）
+   ================================ */
+:root {
+  /* プライマリーカラー - ブランドカラー、主要なアクション */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  
+  /* セカンダリーカラー - アクセント、補助的なアクション */
+  --color-secondary: #10b981;
+  --color-secondary-hover: #059669;
+  
+  /* ニュートラルカラー - テキスト、背景、ボーダー */
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+  --color-background: #f9fafb;
+  --color-surface: #ffffff;
+  
+  /* ステータスカラー */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* スペーシング - 8pxベースのスペーシングシステム */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  
+  /* フォントサイズ */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 2rem;      /* 32px */
+  
+  /* フォントウェイト */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 行間 */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
+  
+  /* ボーダー半径 */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  
+  /* シャドウ */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* トランジション */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ===================================
+   リセット & 基本設定
+   ================================ */
+
+/* モダンなボックスモデルを全要素に適用 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ルート要素とボディの基本設定 */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  /* システムフォントスタックで最適な表示を実現 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+               "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  min-height: 100vh;
+}
+
+/* ===================================
+   タイポグラフィ
+   ================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+/* リンクのスタイル */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===================================
+   レイアウト
+   ================================ */
+
+/* メインコンテナ - ページ全体のコンテンツを包む */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+  width: 100%;
+}
+
+/* メインコンテンツエリア */
+main {
+  padding: var(--space-2xl) 0;
+  min-height: calc(100vh - 64px); /* ナビゲーションバーの高さを考慮 */
+}
+
+/* ===================================
+   ユーティリティクラス
+   ================================ */
+
+/* テキストサイズ */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+
+/* フォントウェイト */
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* テキストカラー */
+.text-primary { color: var(--color-text); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-accent { color: var(--color-primary); }
+
+/* マージン */
+.m-0 { margin: 0; }
+.m-sm { margin: var(--space-sm); }
+.m-md { margin: var(--space-md); }
+.m-lg { margin: var(--space-lg); }
+.m-xl { margin: var(--space-xl); }
+
+/* パディング */
+.p-0 { padding: 0; }
+.p-sm { padding: var(--space-sm); }
+.p-md { padding: var(--space-md); }
+.p-lg { padding: var(--space-lg); }
+.p-xl { padding: var(--space-xl); }
+
+/* テキストアライメント */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* ===================================
+   アクセシビリティ
+   ================================ */
+
+/* スクリーンリーダー専用テキスト */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* フォーカス時の視覚的インジケーター */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===================================
+   レスポンシブ対応
+   ================================ */
+
+/* タブレット（640px以上） */
+@media (min-width: 640px) {
+  .container {
+    padding: 0 var(--space-xl);
+  }
+  
+  h1 {
+    font-size: 2.5rem; /* 40px */
+  }
+}
+
+/* デスクトップ（1024px以上） */
+@media (min-width: 1024px) {
+  main {
+    padding: var(--space-2xl) 0;
+  }
+}

@@ -1,22 +1,55 @@
 {% extends "base.html" %}
+
 {% block title %}商品一覧 | Minimal Shop{% endblock %}
 
 {% block content %}
-<h2>商品一覧</h2>
-<table>
-  <thead>
-    <tr><th>ID</th><th>商品名</th><th>価格</th></tr>
-  </thead>
-  <tbody>
-  {% for p in products %}
-    <tr>
-      <td>{{ p.id }}</td>
-      <td>{{ p.name }}</td>
-      <td>¥{{ p.price }}</td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="3">商品がありません。管理画面から追加してください。</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<!-- ページヘッダー -->
+<header style="margin-bottom: 2rem;">
+  <h1>商品一覧</h1>
+  <p class="text-secondary" style="margin-top: 0.5rem;">
+    現在登録されている商品を表示しています。管理画面から商品を追加・編集できます。
+  </p>
+</header>
+
+{% if products %}
+  <!-- 商品グリッド表示 -->
+  <div class="product-grid">
+    {% for p in products %}
+      <article class="product-card">
+        <!-- 商品ID（小さく表示） -->
+        <div class="product-card__id">ID: {{ p.id }}</div>
+        
+        <!-- 商品名 -->
+        <h2 class="product-card__name">{{ p.name }}</h2>
+        
+        <!-- 価格表示 -->
+        <div class="product-card__price">
+          <span class="product-card__currency">¥</span>{{ p.price|floatformat:0 }}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <!-- 商品が登録されていない場合の表示 -->
+  <div class="empty-state">
+    <div class="empty-state__icon">📦</div>
+    <h2 class="empty-state__title">商品がまだ登録されていません</h2>
+    <p class="empty-state__description">
+      管理画面から商品を追加してください。
+    </p>
+    <a href="/admin/" class="btn btn--primary" target="_blank" rel="noopener">
+      管理画面を開く
+    </a>
+  </div>
+{% endif %}
+
+<!-- 補足情報 -->
+<div style="margin-top: 3rem; padding: 1.5rem; background-color: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+  <h3 style="font-size: 1.125rem; margin-bottom: 0.75rem; color: var(--color-text);">💡 ヒント</h3>
+  <ul style="list-style: none; padding-left: 0; color: var(--color-text-secondary); line-height: 1.6;">
+    <li style="margin-bottom: 0.5rem;">• <a href="/admin/" target="_blank" rel="noopener" style="color: var(--color-primary);">管理画面</a>から商品の追加・編集・削除ができます</li>
+    <li style="margin-bottom: 0.5rem;">• 商品名、価格を設定して保存してください</li>
+    <li>• 変更は即座にこのページに反映されます</li>
+  </ul>
+</div>
 {% endblock %}

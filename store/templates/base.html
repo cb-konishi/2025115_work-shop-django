@@ -1,26 +1,50 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <!-- 文字エンコーディングとビューポート設定 -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- ページタイトル -->
   <title>{% block title %}Minimal Shop{% endblock %}</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif; margin: 2rem; }
-    header { margin-bottom: 1.5rem; }
-    table { border-collapse: collapse; width: 100%; max-width: 640px; }
-    th, td { border: 1px solid #ccc; padding: .5rem .75rem; text-align: left; }
-    th { background: #f6f6f6; }
-    .container { max-width: 720px; }
-    .note { color: #555; font-size: .9rem; margin-top: .5rem;}
-  </style>
+  
+  <!-- メタ情報 -->
+  <meta name="description" content="シンプルでモダンな商品管理システム" />
+  <meta name="author" content="Minimal Shop" />
+  
+  <!-- CSS読み込み -->
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/components.css' %}" />
+  
+  <!-- 追加のスタイル（各ページ固有のスタイル） -->
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Minimal Shop</h1>
-      <div class="note"><a href="/admin/" target="_blank" rel="noopener">管理画面</a> から商品登録できます。</div>
-    </header>
-    {% block content %}{% endblock %}
-  </div>
+  <!-- ナビゲーションバー -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <!-- ロゴ/ブランド名 -->
+      <div class="navbar__brand">
+        <a href="/" class="navbar__logo">Minimal Shop</a>
+      </div>
+      
+      <!-- ナビゲーションメニュー -->
+      <div class="navbar__menu">
+        <a href="/products/" class="navbar__link">商品一覧</a>
+        <a href="/admin/" class="navbar__link" target="_blank" rel="noopener">管理画面</a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- メインコンテンツエリア -->
+  <main>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+  
+  <!-- 追加のJavaScript（将来的な拡張用） -->
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
