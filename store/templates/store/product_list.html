@@ -26,7 +26,8 @@
           <!-- 商品名 -->
           <h3 class="product-name">{{ product.name }}</h3>
           
-          <!-- 商品価格: 目立つように大きく表示 -->
+          <!-- 商品価格: 目立つように大きく表示 
+               floatformat:0 - 日本円は通常小数点以下を表示しないため整数化 -->
           <p class="product-price">¥{{ product.price|floatformat:0 }}</p>
         </div>
       </article>

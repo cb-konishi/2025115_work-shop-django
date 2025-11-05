@@ -132,16 +132,19 @@ body {
   background-color: var(--primary-light);
 }
 
-.btn-admin {
+/* 管理画面ボタン: プライマリアクション用のスタイル */
+.site-nav .btn-admin {
   background-color: var(--primary-color);
-  color: white !important;
+  color: white;
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--radius-md);
   transition: background-color 0.2s ease;
 }
 
-.btn-admin:hover {
+/* ホバー状態: 背景色を濃く変更 */
+.site-nav .btn-admin:hover {
   background-color: var(--primary-hover);
+  color: white;
 }
 
 /* ========================================
@@ -180,6 +183,10 @@ body {
   margin-top: var(--spacing-xl);
 }
 
+/* 商品カードのスタイル
+ * cursor: pointer - 将来的な商品詳細ページへの遷移を想定
+ * ユーザーに対してクリック可能であることを示唆
+ */
 .product-card {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
