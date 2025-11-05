@@ -1,26 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <!-- 基本メタ情報 -->
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="モダンでシンプルなオンラインショップ" />
+  
+  <!-- ページタイトル -->
   <title>{% block title %}Minimal Shop{% endblock %}</title>
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif; margin: 2rem; }
-    header { margin-bottom: 1.5rem; }
-    table { border-collapse: collapse; width: 100%; max-width: 640px; }
-    th, td { border: 1px solid #ccc; padding: .5rem .75rem; text-align: left; }
-    th { background: #f6f6f6; }
-    .container { max-width: 720px; }
-    .note { color: #555; font-size: .9rem; margin-top: .5rem;}
-  </style>
+  
+  <!-- Google Fonts: Inter - モダンで読みやすいフォント -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- カスタムCSS -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'store/css/main.css' %}" />
+  
+  <!-- 追加スタイル用ブロック -->
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Minimal Shop</h1>
-      <div class="note"><a href="/admin/" target="_blank" rel="noopener">管理画面</a> から商品登録できます。</div>
-    </header>
+  <!-- サイトヘッダー: ロゴとナビゲーション -->
+  <header class="site-header">
+    <div class="header-container">
+      <!-- ロゴエリア -->
+      <div class="site-logo">
+        <span class="logo-icon">🛍️</span>
+        <h1>Minimal Shop</h1>
+      </div>
+      
+      <!-- ナビゲーションメニュー -->
+      <nav class="site-nav">
+        <ul>
+          <li><a href="{% url 'product_list' %}">商品一覧</a></li>
+          <li><a href="/admin/" class="btn-admin" target="_blank" rel="noopener">管理画面</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- メインコンテンツエリア -->
+  <main class="main-container">
     {% block content %}{% endblock %}
-  </div>
+  </main>
+  
+  <!-- サイトフッター -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p>&copy; 2025 Minimal Shop. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <!-- 追加スクリプト用ブロック -->
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

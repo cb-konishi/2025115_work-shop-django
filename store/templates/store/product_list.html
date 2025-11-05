@@ -2,21 +2,48 @@
 {% block title %}商品一覧 | Minimal Shop{% endblock %}
 
 {% block content %}
-<h2>商品一覧</h2>
-<table>
-  <thead>
-    <tr><th>ID</th><th>商品名</th><th>価格</th></tr>
-  </thead>
-  <tbody>
-  {% for p in products %}
-    <tr>
-      <td>{{ p.id }}</td>
-      <td>{{ p.name }}</td>
-      <td>¥{{ p.price }}</td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="3">商品がありません。管理画面から追加してください。</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<!-- ページヘッダー: タイトルと説明 -->
+<div class="page-header">
+  <h2 class="page-title">商品一覧</h2>
+  <p class="page-description">厳選された商品をご覧ください</p>
+</div>
+
+{% if products %}
+  <!-- 商品カードグリッド: レスポンシブな商品表示 -->
+  <div class="product-grid">
+    {% for product in products %}
+      <article class="product-card">
+        <!-- 商品画像プレースホルダー: 将来的に画像を追加可能 -->
+        <div class="product-image-placeholder">
+          📦
+        </div>
+        
+        <!-- 商品情報 -->
+        <div class="product-info">
+          <!-- 商品ID: 管理用の識別番号 -->
+          <span class="product-id">ID: {{ product.id }}</span>
+          
+          <!-- 商品名 -->
+          <h3 class="product-name">{{ product.name }}</h3>
+          
+          <!-- 商品価格: 目立つように大きく表示 
+               floatformat:0 - 日本円は通常小数点以下を表示しないため整数化 -->
+          <p class="product-price">¥{{ product.price|floatformat:0 }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <!-- 空状態: 商品が登録されていない場合の表示 -->
+  <div class="empty-state">
+    <div class="empty-state-icon">📭</div>
+    <h3 class="empty-state-title">商品がまだ登録されていません</h3>
+    <p class="empty-state-description">
+      管理画面から商品を追加して、ショップを充実させましょう
+    </p>
+    <a href="/admin/" class="empty-state-link" target="_blank" rel="noopener">
+      管理画面を開く
+    </a>
+  </div>
+{% endif %}
 {% endblock %}
