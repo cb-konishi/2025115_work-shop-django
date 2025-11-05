@@ -333,7 +333,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: rgba(37, 99, 235, 0.05);
+  background-color: var(--color-primary-hover-bg);
   transition: background-color var(--transition-fast);
 }
 
@@ -400,6 +400,58 @@
   background-color: var(--color-background);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
+}
+
+/* ===================================
+   ページヘッダー
+   ================================ */
+
+.page-header {
+  margin-bottom: var(--space-2xl);
+}
+
+.page-header__title {
+  margin-bottom: var(--space-sm);
+}
+
+.page-header__description {
+  color: var(--color-text-secondary);
+  margin-top: var(--space-sm);
+  margin-bottom: 0;
+}
+
+/* ===================================
+   ヒントセクション
+   ================================ */
+
+.hint-section {
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.hint-section__title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+}
+
+.hint-section__list {
+  list-style: none;
+  padding-left: 0;
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: 0;
+}
+
+.hint-section__list li {
+  margin-bottom: var(--space-sm);
+}
+
+.hint-section__list li:last-child {
+  margin-bottom: 0;
 }
 
 /* ===================================
