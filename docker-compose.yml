@@ -3,7 +3,7 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
-    container_name: minimal_mysql
+    container_name: mysql
     environment:
       MYSQL_DATABASE: appdb
       MYSQL_USER: appuser
@@ -24,7 +24,7 @@ services:
 
   web:
     build: .
-    container_name: minimal_django
+    container_name: django
     command: ["/bin/bash", "/app/entrypoint.sh"]
     environment:
       DJANGO_SETTINGS_MODULE: config.settings
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - "8001:8000"
+      - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
