@@ -48,19 +48,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# MySQL接続
+# SQLite接続
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("DB_NAME", "appdb"),
-        "USER": os.environ.get("DB_USER", "appuser"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "apppass"),
-        "HOST": os.environ.get("DB_HOST", "db"),
-        "PORT": os.environ.get("DB_PORT", "3306"),
-        "OPTIONS": {
-            "charset": "utf8mb4",
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
