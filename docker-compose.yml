@@ -1,38 +1,12 @@
 version: "3.9"
 
 services:
-  db:
-    image: mysql:8.0
-    container_name: mysql
-    environment:
-      MYSQL_DATABASE: appdb
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppass
-      MYSQL_ROOT_PASSWORD: rootpass
-      TZ: Asia/Tokyo
-    command: >
-      --default-authentication-plugin=mysql_native_password
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_unicode_ci
-    ports:
-      - "3306:3306"
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
-      interval: 5s
-      timeout: 5s
-      retries: 30
-
   web:
     build: .
     container_name: django
     command: ["/bin/bash", "/app/entrypoint.sh"]
     environment:
       DJANGO_SETTINGS_MODULE: config.settings
-      DB_NAME: appdb
-      DB_USER: appuser
-      DB_PASSWORD: apppass
-      DB_HOST: db
-      DB_PORT: "3306"
       SUPERUSER_NAME: admin
       SUPERUSER_EMAIL: admin@example.com
       SUPERUSER_PASSWORD: admin
@@ -41,6 +15,3 @@ services:
       - ./:/app
     ports:
       - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
