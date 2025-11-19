@@ -1,26 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "[entrypoint] Waiting for MySQL at ${DB_HOST}:${DB_PORT} ..."
-
-# PythonワンライナーでTCP接続待機（最小依存・確実）
-python - <<'PY'
-import os, socket, time
-host = os.environ.get("DB_HOST", "db")
-port = int(os.environ.get("DB_PORT", "3306"))
-deadline = time.time() + 300  # 最大5分待つ
-while True:
-    try:
-        with socket.create_connection((host, port), timeout=2):
-            print(f"[wait] Connected to {host}:{port}")
-            break
-    except OSError:
-        if time.time() > deadline:
-            raise SystemExit(f"[wait] Timeout waiting for {host}:{port}")
-        print("[wait] still waiting...")
-        time.sleep(2)
-PY
-
 echo "[entrypoint] Running makemigrations & migrate ..."
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
