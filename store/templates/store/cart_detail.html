@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}カート | Minimal Shop{% endblock %}
+
+{% block content %}
+<!-- ページヘッダー: タイトルと説明 -->
+<div class="page-header">
+  <h2 class="page-title">カート</h2>
+  <p class="page-description">選択した商品を確認してください</p>
+</div>
+
+{% if cart_items %}
+  <!-- カート内容テーブル -->
+  <div class="cart-container">
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>商品名</th>
+          <th>価格</th>
+          <th>数量</th>
+          <th>小計</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr data-item-id="{{ item.id }}">
+          <td class="cart-product-name">{{ item.product.name }}</td>
+          <td class="cart-product-price">¥{{ item.product.price|floatformat:0 }}</td>
+          <td class="cart-quantity">
+            <form class="quantity-form" data-item-id="{{ item.id }}">
+              {% csrf_token %}
+              <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="quantity-input">
+              <button type="submit" class="btn-update">更新</button>
+            </form>
+          </td>
+          <td class="cart-subtotal">¥{{ item.get_subtotal|floatformat:0 }}</td>
+          <td>
+            <button class="btn-remove" data-item-id="{{ item.id }}">削除</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <!-- カート合計 -->
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span class="summary-label">合計数量:</span>
+        <span class="summary-value" id="total-quantity">{{ total_quantity }}点</span>
+      </div>
+      <div class="summary-row summary-total">
+        <span class="summary-label">合計金額:</span>
+        <span class="summary-value" id="total-price">¥{{ total_price|floatformat:0 }}</span>
+      </div>
+      <div class="cart-actions">
+        <a href="{% url 'product_list' %}" class="btn-continue">買い物を続ける</a>
+        <button class="btn-checkout" disabled>注文に進む（未実装）</button>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <!-- 空状態: カートが空の場合 -->
+  <div class="empty-state">
+    <div class="empty-state-icon">🛒</div>
+    <h3 class="empty-state-title">カートは空です</h3>
+    <p class="empty-state-description">
+      商品一覧ページから商品をカートに追加してください
+    </p>
+    <a href="{% url 'product_list' %}" class="empty-state-link">
+      商品一覧を見る
+    </a>
+  </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// カートアイテムの数量更新処理
+document.addEventListener('DOMContentLoaded', function() {
+  // 数量更新フォームの処理
+  const quantityForms = document.querySelectorAll('.quantity-form');
+  quantityForms.forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const itemId = this.dataset.itemId;
+      const quantity = this.querySelector('input[name="quantity"]').value;
+      const csrfToken = this.querySelector('input[name="csrfmiddlewaretoken"]').value;
+      
+      // 数量更新リクエストを送信
+      fetch(`/products/cart/update/${itemId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `quantity=${quantity}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // 小計を更新
+          const row = document.querySelector(`tr[data-item-id="${itemId}"]`);
+          row.querySelector('.cart-subtotal').textContent = `¥${Math.floor(data.subtotal)}`;
+          
+          // 合計を更新
+          document.getElementById('total-price').textContent = `¥${Math.floor(data.cart_total)}`;
+          document.getElementById('total-quantity').textContent = `${data.cart_count}点`;
+          
+          // ヘッダーのカート数を更新
+          const cartCountElement = document.querySelector('.cart-count');
+          if (cartCountElement) {
+            cartCountElement.textContent = data.cart_count;
+          }
+        } else {
+          alert(data.message || 'エラーが発生しました');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('数量の更新に失敗しました');
+      });
+    });
+  });
+  
+  // 削除ボタンの処理
+  const removeButtons = document.querySelectorAll('.btn-remove');
+  removeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      if (!confirm('この商品をカートから削除しますか？')) {
+        return;
+      }
+      
+      const itemId = this.dataset.itemId;
+      const csrfToken = getCookie('csrftoken');
+      
+      // 削除リクエストを送信
+      fetch(`/products/cart/remove/${itemId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // 行を削除
+          const row = document.querySelector(`tr[data-item-id="${itemId}"]`);
+          row.remove();
+          
+          // 合計を更新
+          document.getElementById('total-price').textContent = `¥${Math.floor(data.cart_total)}`;
+          document.getElementById('total-quantity').textContent = `${data.cart_count}点`;
+          
+          // ヘッダーのカート数を更新
+          const cartCountElement = document.querySelector('.cart-count');
+          if (cartCountElement) {
+            cartCountElement.textContent = data.cart_count;
+          }
+          
+          // カートが空になった場合はリロード
+          const tbody = document.querySelector('.cart-table tbody');
+          if (tbody.children.length === 0) {
+            location.reload();
+          }
+        } else {
+          alert(data.message || 'エラーが発生しました');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('商品の削除に失敗しました');
+      });
+    });
+  });
+});
+
+// CSRFトークンを取得する関数
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+{% endblock %}

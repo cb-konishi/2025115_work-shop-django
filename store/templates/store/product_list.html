@@ -29,6 +29,11 @@
           <!-- 商品価格: 目立つように大きく表示 
                floatformat:0 - 日本円は通常小数点以下を表示しないため整数化 -->
           <p class="product-price">¥{{ product.price|floatformat:0 }}</p>
+          
+          <!-- カートに追加ボタン -->
+          <button class="btn-add-to-cart" data-product-id="{{ product.id }}">
+            カートに入れる
+          </button>
         </div>
       </article>
     {% endfor %}
@@ -46,4 +51,64 @@
     </a>
   </div>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// カートに商品を追加する処理
+document.addEventListener('DOMContentLoaded', function() {
+  const addButtons = document.querySelectorAll('.btn-add-to-cart');
+  
+  addButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const productId = this.dataset.productId;
+      
+      // CSRFトークンを取得
+      const csrfToken = getCookie('csrftoken');
+      
+      // カートに追加リクエストを送信
+      fetch(`/products/cart/add/${productId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          // カート数を更新
+          const cartCountElement = document.querySelector('.cart-count');
+          if (cartCountElement) {
+            cartCountElement.textContent = data.cart_count;
+          }
+        } else {
+          alert(data.message || 'エラーが発生しました');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('カートへの追加に失敗しました');
+      });
+    });
+  });
+});
+
+// CSRFトークンを取得する関数
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
 {% endblock %}
